@@ -12,42 +12,82 @@
         <div class="kanban-heading">
             <strong class="kanban-heading-text">Kanban Board</strong>
         </div>
+
         <div class="kanban-board">
-            <div class="kanban-block" id="todo" ondrop="drop(event)" ondragover="allowDrop(event)">
-                <strong>To Do</strong>
-                <div class="task-button-block">
-                    <button id="task-button">Create new task
+            <div class="task-block">
+                <div class="task" id="task1" draggable="true" ondragstart="drag(event)">
+                    <span>Task 1</span>
+                </div>
+                <div class="task" id="task2" draggable="true" ondragstart="drag(event)">
+                    <span>Task 2</span>
+                </div>
+                <div class="task" id="task3" draggable="true" ondragstart="drag(event)">
+                    <span>Task 3</span>
+                </div>
+                <div class="task" id="task4" draggable="true" ondragstart="drag(event)">
+                    <span>Task 4</span>
+                </div>
+                <div class="task" id="task5" draggable="true" ondragstart="drag(event)">
+                    <span>Task 5</span>
+                </div>
+                <div class="task" id="task6" draggable="true" ondragstart="drag(event)">
+                    <span>Task 6</span>
                 </div>
             </div>
-            <div class="task" id="task1" draggable="true" ondragstart="drag(event)">
-                <span>Task 1</span>
-            </div>
-            <div class="task" id="task2" draggable="true" ondragstart="drag(event)">
-                <span>Task 2</span>
-            </div>
-            <div class="task" id="task3" draggable="true" ondragstart="drag(event)">
-                <span>Task 3</span>
-            </div>
-            <div class="task" id="task4" draggable="true" ondragstart="drag(event)">
-                <span>Task 4</span>
-            </div>
-            <div class="task" id="task5" draggable="true" ondragstart="drag(event)">
-                <span>Task 5</span>
-            </div>
-            <div class="task" id="task6" draggable="true" ondragstart="drag(event)">
-                <span>Task 6</span>
+            <div class="kanban">
+                <div class="kanban-block" id="todo" ondrop="drop(event)" ondragover="allowDrop(event)">
+                    <strong>To Do</strong>
+                    <div class="task-button-block">
+                        <button id="task-button" onclick="addTask(event,0)">Create new task
+                    </div>
+                </div>
+                <div class="kanban-block" id="inprogress" ondrop="drop(event)" ondragover="allowDrop(event)">
+                    <strong>In Progress</strong>
+                </div>
+                <div class="kanban-block" id="done" ondrop="drop(event)" ondragover="allowDrop(event)">
+                    <strong>Done</strong>
+                </div>
             </div>
         </div>
-        <div class="kanban-block" id="inprogress" ondrop="drop(event)" ondragover="allowDrop(event)">
-            <strong>In Progress</strong>
-        </div>
-        <div class="kanban-block" id="done" ondrop="drop(event)" ondragover="allowDrop(event)">
-            <strong>Done</strong>
-        </div>
+
     </div>
     </div>
 </body>
+<!-- <script src="./indexDB.js" type="module" defer></script> -->
+<script type="module">
+    import { openDB, addData, deleteData, getData, updateData } from './indexDB.js';
+    window.dbName = 'kanbanDB';
+    window.dbVersion = 1;
+    window.dbStoreName = 'kanbanStore';
+    const res = await openDB(dbName, dbVersion, dbStoreName, 'id');
+    window.db = res.success && res.data
+    window.addData = addData
+    window.deleteData = deleteData
+    window.getData = getData
+    window.updateData = updateData
+
+</script>
 <script>
+    /**添加新任务
+    * @param {number} type 创建类型 0:todo；1:inprogress；2:done
+    */
+    async function addTask (ev, type) {
+
+        const data = { id: '3', value: '新建的task', type: type }
+        const res = await addData(db, dbStoreName, data);
+        if (!res.success) {
+            console.error('添加数据失败', res.msg);
+            return;
+        }
+        const child = document.createElement('div')
+        child.className = 'task'
+        child.draggable = true
+        child.ondragstart = drag
+        child.id = data.id
+        child.innerHTML = `<span>${data.value}</span>`
+        ev.target.closest('.kanban-block').appendChild(child)
+
+    }
     function drag (ev) {
         ev.dataTransfer.setData("text", ev.target.id);
     }
@@ -57,7 +97,8 @@
     function drop (ev) {
         ev.preventDefault();
         var data = ev.dataTransfer.getData("text");
-        ev.target.appendChild(document.getElementById(data));
+        ev.target.closest('.kanban-block').appendChild(document.getElementById(data));
     }
 </script>
+
 </html>
