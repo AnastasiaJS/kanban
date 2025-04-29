@@ -38,7 +38,7 @@
                 <div class="kanban-block" id="todo" ondrop="drop(event)" ondragover="allowDrop(event)">
                     <strong>To Do</strong>
                     <div class="task-button-block">
-                        <button id="task-button" onclick="addTask(event,0)">Create new task
+                        <button id="task-button" onclick="toggleModal(event,true)">Create new task
                     </div>
                 </div>
                 <div class="kanban-block" id="inprogress" ondrop="drop(event)" ondragover="allowDrop(event)">
@@ -51,6 +51,39 @@
         </div>
 
     </div>
+    </div>
+
+    <div class="mask"></div>
+    <div class="task-wrap">
+        <strong>新建任务</strong>
+        <form id="task-form" action="javascript:void(0)" onsubmit="return false">
+            <div class="form-item task-name">
+                <span class="icon" >
+                    <svg t="1745910118268" class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="1280" width="200" height="200"><path d="M821.63 327.143v437.715H204.37V327.143h617.26m16.561-38.24H187.809c-11.973 0-21.679 9.706-21.679 21.679v470.836c0 11.973 9.706 21.679 21.679 21.679h650.382c11.973 0 21.679-9.706 21.679-21.679V310.583c0-11.974-9.706-21.68-21.679-21.68z" fill="#3D3939" p-id="1281"></path><path d="M646.649 147.598v135.958H381.302V147.598h265.347m16.561-38.24H364.741c-11.973 0-21.679 9.706-21.679 21.679v190.759H684.89V131.037c-0.001-11.973-9.707-21.679-21.68-21.679zM364.647 629.784c-10.559 0-19.12-8.561-19.12-19.12V422.9c0-10.559 8.561-19.12 19.12-19.12s19.12 8.561 19.12 19.12v187.765c0 10.558-8.561 19.119-19.12 19.119zM667.621 629.784c-10.559 0-19.12-8.561-19.12-19.12V422.9c0-10.559 8.561-19.12 19.12-19.12 10.559 0 19.12 8.561 19.12 19.12v187.765c0 10.558-8.561 19.119-19.12 19.119z" fill="#3D3939" p-id="1282"></path></svg>
+                </span>
+                <input type="text" placeholder="所属项目" name="task_name"></input>
+            </div>
+            <div class="form-item task-detail">
+                <span class="icon">
+                    <svg t="1745910682549" class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="1437" width="200" height="200"><path d="M267.304 317.828h629.071M267.305 294.217h629.068v47.226H267.305z" fill="#3D3939" p-id="1438"></path><path d="M267.304 450.716h629.071M267.305 427.105h629.068v47.226H267.305z" fill="#3D3939" p-id="1439"></path><path d="M267.304 583.604h629.071M267.305 559.993h629.068v47.226H267.305z" fill="#3D3939" p-id="1440"></path><path d="M267.304 716.492h629.071M267.305 692.877h629.068v47.226H267.305z" fill="#3D3939" p-id="1441"></path><path d="M205.912 317.828h-79.62M126.293 294.217h79.62v47.226h-79.62z" fill="#3D3939" p-id="1442"></path><path d="M205.912 450.716h-79.62M126.293 427.105h79.62v47.226h-79.62z" fill="#3D3939" p-id="1443"></path><path d="M205.912 583.604h-79.62M126.293 559.993h79.62v47.226h-79.62z" fill="#3D3939" p-id="1444"></path><path d="M205.912 716.492h-79.62M126.293 692.877h79.62v47.226h-79.62z" fill="#3D3939" p-id="1445"></path></svg>
+                </span>
+                <input type="text" placeholder='任务详情' name="task_detail"></input>
+            </div>
+            <div class="form-item task-begin">
+                <span class="icon">
+                    <svg t="1745910704942" class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="1600" width="200" height="200"><path d="M845.582 291.768v459.069H183.899V291.768h661.683m17.752-40.992H166.147c-12.835 0-23.24 10.405-23.24 23.239v494.574c0 12.835 10.405 23.239 23.24 23.239h697.188c12.835 0 23.24-10.404 23.24-23.239V274.015c-0.001-12.835-10.406-23.239-23.241-23.239z" fill="#3D3939" p-id="1601"></path><path d="M866.672 413.73H164.485c-11.319 0-20.496-9.177-20.496-20.496s9.177-20.496 20.496-20.496h702.188c11.321 0 20.496 9.177 20.496 20.496s-9.176 20.496-20.497 20.496zM338.267 287.708c-11.321 0-20.496-9.177-20.496-20.496v-78.834c0-11.319 9.175-20.496 20.496-20.496s20.496 9.177 20.496 20.496v78.834c0 11.319-9.175 20.496-20.496 20.496zM693.733 287.708c-11.321 0-20.496-9.177-20.496-20.496v-78.834c0-11.319 9.175-20.496 20.496-20.496s20.496 9.177 20.496 20.496v78.834c0 11.319-9.175 20.496-20.496 20.496zM364.119 551.955H312.41c-11.321 0-20.496-9.177-20.496-20.496V479.75c0-11.319 9.175-20.496 20.496-20.496h51.708c11.321 0 20.496 9.177 20.496 20.496v51.708c0.001 11.319-9.174 20.497-20.495 20.497z m-31.212-40.993h10.716v-10.716h-10.716v10.716zM541.854 552.889h-51.708c-11.321 0-20.496-9.177-20.496-20.496v-51.708c0-11.319 9.175-20.496 20.496-20.496h51.708c11.321 0 20.496 9.177 20.496 20.496v51.708c0 11.319-9.175 20.496-20.496 20.496z m-31.212-40.992h10.716v-10.716h-10.716v10.716zM719.589 553.822h-51.708c-11.321 0-20.496-9.177-20.496-20.496v-51.708c0-11.319 9.175-20.496 20.496-20.496h51.708c11.321 0 20.496 9.177 20.496 20.496v51.708c0 11.319-9.175 20.496-20.496 20.496z m-31.212-40.992h10.716v-10.716h-10.716v10.716zM364.119 693.914H312.41c-11.321 0-20.496-9.177-20.496-20.496v-51.706c0-11.319 9.175-20.496 20.496-20.496h51.708c11.321 0 20.496 9.177 20.496 20.496v51.706c0.001 11.319-9.174 20.496-20.495 20.496z m-31.212-40.992h10.716v-10.714h-10.716v10.714zM541.854 694.848h-51.708c-11.321 0-20.496-9.177-20.496-20.496v-51.708c0-11.319 9.175-20.496 20.496-20.496h51.708c11.321 0 20.496 9.177 20.496 20.496v51.708c0 11.319-9.175 20.496-20.496 20.496z m-31.212-40.992h10.716V643.14h-10.716v10.716z" fill="#3D3939" p-id="1602"></path></svg>
+                </span>
+                <input type="time" placeholder="开始时间" name="task_begin"></input>
+            </div>
+            <div class="form-item task-end">
+                <span class="icon ">
+                    <svg t="1745910704942" class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="1600" width="200" height="200"><path d="M845.582 291.768v459.069H183.899V291.768h661.683m17.752-40.992H166.147c-12.835 0-23.24 10.405-23.24 23.239v494.574c0 12.835 10.405 23.239 23.24 23.239h697.188c12.835 0 23.24-10.404 23.24-23.239V274.015c-0.001-12.835-10.406-23.239-23.241-23.239z" fill="#3D3939" p-id="1601"></path><path d="M866.672 413.73H164.485c-11.319 0-20.496-9.177-20.496-20.496s9.177-20.496 20.496-20.496h702.188c11.321 0 20.496 9.177 20.496 20.496s-9.176 20.496-20.497 20.496zM338.267 287.708c-11.321 0-20.496-9.177-20.496-20.496v-78.834c0-11.319 9.175-20.496 20.496-20.496s20.496 9.177 20.496 20.496v78.834c0 11.319-9.175 20.496-20.496 20.496zM693.733 287.708c-11.321 0-20.496-9.177-20.496-20.496v-78.834c0-11.319 9.175-20.496 20.496-20.496s20.496 9.177 20.496 20.496v78.834c0 11.319-9.175 20.496-20.496 20.496zM364.119 551.955H312.41c-11.321 0-20.496-9.177-20.496-20.496V479.75c0-11.319 9.175-20.496 20.496-20.496h51.708c11.321 0 20.496 9.177 20.496 20.496v51.708c0.001 11.319-9.174 20.497-20.495 20.497z m-31.212-40.993h10.716v-10.716h-10.716v10.716zM541.854 552.889h-51.708c-11.321 0-20.496-9.177-20.496-20.496v-51.708c0-11.319 9.175-20.496 20.496-20.496h51.708c11.321 0 20.496 9.177 20.496 20.496v51.708c0 11.319-9.175 20.496-20.496 20.496z m-31.212-40.992h10.716v-10.716h-10.716v10.716zM719.589 553.822h-51.708c-11.321 0-20.496-9.177-20.496-20.496v-51.708c0-11.319 9.175-20.496 20.496-20.496h51.708c11.321 0 20.496 9.177 20.496 20.496v51.708c0 11.319-9.175 20.496-20.496 20.496z m-31.212-40.992h10.716v-10.716h-10.716v10.716zM364.119 693.914H312.41c-11.321 0-20.496-9.177-20.496-20.496v-51.706c0-11.319 9.175-20.496 20.496-20.496h51.708c11.321 0 20.496 9.177 20.496 20.496v51.706c0.001 11.319-9.174 20.496-20.495 20.496z m-31.212-40.992h10.716v-10.714h-10.716v10.714zM541.854 694.848h-51.708c-11.321 0-20.496-9.177-20.496-20.496v-51.708c0-11.319 9.175-20.496 20.496-20.496h51.708c11.321 0 20.496 9.177 20.496 20.496v51.708c0 11.319-9.175 20.496-20.496 20.496z m-31.212-40.992h10.716V643.14h-10.716v10.716z" fill="#3D3939" p-id="1602"></path></svg>
+                </span>
+                <input type="time" placeholder="结束时间" name="task_end"></input>
+            </div>
+            <button type="primiry" onclick="addTask(event)">提交</button>
+            <button onclick="toggleModal(event,false)">取消</button>
+        </form>
     </div>
 </body>
 <!-- <script src="./indexDB.js" type="module" defer></script> -->
@@ -68,25 +101,41 @@
 
 </script>
 <script>
+   
     /**添加新任务
-    * @param {number} type 创建类型 0:todo；1:inprogress；2:done
     */
-    async function addTask (ev, type) {
-
-        const data = { id: '3', value: '新建的task', type: type }
-        const res = await addData(db, dbStoreName, data);
+    async function addTask (ev) {
+        var formData = new FormData(document.getElementById('task-form'));
+        console.log(ev,formData.entries());
+        const data={id:new Date().getTime()};
+        for(let [name,value] of formData.entries()){
+            data[name]=value
+        }
+        console.log(data)
+        ev.preventDefault()
+        const res = await addData(db, dbStoreName, {id:data.id,value:data});
         if (!res.success) {
             console.error('添加数据失败', res.msg);
             return;
         }
+        toggleModal(ev,false)
         const child = document.createElement('div')
         child.className = 'task'
         child.draggable = true
         child.ondragstart = drag
         child.id = data.id
-        child.innerHTML = `<span>${data.value}</span>`
-        ev.target.closest('.kanban-block').appendChild(child)
+        child.innerHTML = `<span>${data.task_detail}</span>`
+        document.getElementById('todo').appendChild(child)
 
+    }
+     /**打开新建任务窗口
+     */
+     function toggleModal (ev,visible) {
+        const mask = document.querySelector('.mask')
+        const taskWrap = document.querySelector('.task-wrap')
+        const display=visible?'block':'none'
+        mask.style.display = display
+        taskWrap.style.display = display
     }
     function drag (ev) {
         ev.dataTransfer.setData("text", ev.target.id);
