@@ -21,7 +21,8 @@
       // @ts-ignore
       const { webkitIndexedDB, indexedDB, mozIndexedDB, msIndexedDB } = window;
       const indexDB = indexedDB || mozIndexedDB || webkitIndexedDB || msIndexedDB;
-      let db = null;
+        let db = null;
+        // indexDB.deleteDatabase(dbName); // 删除数据库
       const request = indexDB.open(dbName, version);
       // 操作成功
       request.onsuccess = function (event) {
@@ -79,9 +80,9 @@
       if (!db) {
         reject("数据库不存在或没有初始化");
       }
-      if (!dataConfig || !dataConfig.value) {
-        reject("value是必传项，参照格式{[keyPath]:'key',value:'value'}");
-      }
+    //   if (!dataConfig || !dataConfig.value) {
+    //     reject("value是必传项，参照格式{[keyPath]:'key',value:'value'}");
+    //   }
       const req = db
         .transaction([storeName], "readwrite")
         .objectStore(storeName) // 仓库对象
@@ -118,9 +119,9 @@
       if (!db) {
         reject("数据库不存在或没有初始化");
       }
-      if (!dataConfig || !dataConfig.value) {
-        reject("value是必传项，参照格式{[keyPath]:'key',value:'value'}");
-      }
+    //   if (!dataConfig || !dataConfig.value) {
+    //     reject("value是必传项，参照格式{[keyPath]:'key',value:'value'}");
+    //   }
       const req = db
         .transaction([storeName], "readwrite")
         .objectStore(storeName)
@@ -239,14 +240,25 @@
         .objectStore(storeName) // 仓库对象
         .index(indexKey)
         .openCursor(keyRange, "next");
-      // 操作成功
-      req.onsuccess = function (e) {
-        resolve({
-          code: 0,
-          success: true,
-          data: e?.target?.result,
-          msg: "数据查询成功!",
-        });
+        // 操作成功
+        const data=[]
+        
+        req.onsuccess = function (e) {
+            const cursor = e?.target?.result
+            if (cursor) { 
+                // 游标指向的对象
+                data.push({...cursor.value})
+                // 游标继续指向下一个对象
+                cursor.continue();
+            } else {
+                // 游标指向的对象不存在
+                resolve({
+                    code: 0,
+                    success: true,
+                    data: data,
+                    msg: "数据查询成功!",
+                });
+            }
       };
       // 操作失败
       req.onerror = function () {

@@ -3,20 +3,32 @@
 
 <head>
     <link rel="stylesheet" href="./kanban.css">
-    <title>Kanban Board</title>
+    <title>任务看板</title>
 
 </head>
 
 <body>
     <div class="container">
         <div class="kanban-heading">
-            <strong class="kanban-heading-text">Kanban Board</strong>
+            <strong class="kanban-heading-text">任务看板</strong>
         </div>
 
         <div class="kanban-board">
             <div class="task-block">
                 <div class="task" id="task1" draggable="true" ondragstart="drag(event)">
-                    <span>Task 1</span>
+                    <div class="item-title">Task 1</div>
+                    <div class="item-detail">
+                        <span>所属项目</span>
+                        <div>个人看板</div>
+                    </div>
+                    <div class="item-detail">
+                        <span>开始时间</span>
+                        <div>2025-04-23 10:00</div>
+                    </div>
+                    <div class="item-detail">
+                        <span>结束时间</span>
+                        <div>2025-04-23 10:00</div>
+                    </div>
                 </div>
                 <div class="task" id="task2" draggable="true" ondragstart="drag(event)">
                     <span>Task 2</span>
@@ -35,17 +47,17 @@
                 </div>
             </div>
             <div class="kanban">
-                <div class="kanban-block" id="todo" ondrop="drop(event)" ondragover="allowDrop(event)">
-                    <strong>To Do</strong>
+                <div class="kanban-block" id="todo" ondrop="drop(event,'0')" ondragover="allowDrop(event)">
+                    <strong>未开始</strong>
                     <div class="task-button-block">
-                        <button id="task-button" onclick="toggleModal(event,true)">Create new task
+                        <button id="task-button" onclick="toggleModal(event,true)">新建任务
                     </div>
                 </div>
-                <div class="kanban-block" id="inprogress" ondrop="drop(event)" ondragover="allowDrop(event)">
-                    <strong>In Progress</strong>
+                <div class="kanban-block" id="inprogress" ondrop="drop(event,'1')" ondragover="allowDrop(event)">
+                    <strong>进行中</strong>
                 </div>
-                <div class="kanban-block" id="done" ondrop="drop(event)" ondragover="allowDrop(event)">
-                    <strong>Done</strong>
+                <div class="kanban-block" id="done" ondrop="drop(event,'2')" ondragover="allowDrop(event)">
+                    <strong>已完成</strong>
                 </div>
             </div>
         </div>
@@ -58,28 +70,70 @@
         <strong>新建任务</strong>
         <form id="task-form" action="javascript:void(0)" onsubmit="return false">
             <div class="form-item task-name">
-                <span class="icon" >
-                    <svg t="1745910118268" class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="1280" width="200" height="200"><path d="M821.63 327.143v437.715H204.37V327.143h617.26m16.561-38.24H187.809c-11.973 0-21.679 9.706-21.679 21.679v470.836c0 11.973 9.706 21.679 21.679 21.679h650.382c11.973 0 21.679-9.706 21.679-21.679V310.583c0-11.974-9.706-21.68-21.679-21.68z" fill="#3D3939" p-id="1281"></path><path d="M646.649 147.598v135.958H381.302V147.598h265.347m16.561-38.24H364.741c-11.973 0-21.679 9.706-21.679 21.679v190.759H684.89V131.037c-0.001-11.973-9.707-21.679-21.68-21.679zM364.647 629.784c-10.559 0-19.12-8.561-19.12-19.12V422.9c0-10.559 8.561-19.12 19.12-19.12s19.12 8.561 19.12 19.12v187.765c0 10.558-8.561 19.119-19.12 19.119zM667.621 629.784c-10.559 0-19.12-8.561-19.12-19.12V422.9c0-10.559 8.561-19.12 19.12-19.12 10.559 0 19.12 8.561 19.12 19.12v187.765c0 10.558-8.561 19.119-19.12 19.119z" fill="#3D3939" p-id="1282"></path></svg>
+                <span class="icon">
+                    <svg t="1745910118268" class="icon" viewBox="0 0 1024 1024" version="1.1"
+                        xmlns="http://www.w3.org/2000/svg" p-id="1280" width="200" height="200">
+                        <path
+                            d="M821.63 327.143v437.715H204.37V327.143h617.26m16.561-38.24H187.809c-11.973 0-21.679 9.706-21.679 21.679v470.836c0 11.973 9.706 21.679 21.679 21.679h650.382c11.973 0 21.679-9.706 21.679-21.679V310.583c0-11.974-9.706-21.68-21.679-21.68z"
+                            fill="#3D3939" p-id="1281"></path>
+                        <path
+                            d="M646.649 147.598v135.958H381.302V147.598h265.347m16.561-38.24H364.741c-11.973 0-21.679 9.706-21.679 21.679v190.759H684.89V131.037c-0.001-11.973-9.707-21.679-21.68-21.679zM364.647 629.784c-10.559 0-19.12-8.561-19.12-19.12V422.9c0-10.559 8.561-19.12 19.12-19.12s19.12 8.561 19.12 19.12v187.765c0 10.558-8.561 19.119-19.12 19.119zM667.621 629.784c-10.559 0-19.12-8.561-19.12-19.12V422.9c0-10.559 8.561-19.12 19.12-19.12 10.559 0 19.12 8.561 19.12 19.12v187.765c0 10.558-8.561 19.119-19.12 19.119z"
+                            fill="#3D3939" p-id="1282"></path>
+                    </svg>
                 </span>
-                <input type="text" placeholder="所属项目" name="task_name"></input>
+                <input type="text" placeholder="所属项目" name="name" value="个人看板"></input>
             </div>
             <div class="form-item task-detail">
                 <span class="icon">
-                    <svg t="1745910682549" class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="1437" width="200" height="200"><path d="M267.304 317.828h629.071M267.305 294.217h629.068v47.226H267.305z" fill="#3D3939" p-id="1438"></path><path d="M267.304 450.716h629.071M267.305 427.105h629.068v47.226H267.305z" fill="#3D3939" p-id="1439"></path><path d="M267.304 583.604h629.071M267.305 559.993h629.068v47.226H267.305z" fill="#3D3939" p-id="1440"></path><path d="M267.304 716.492h629.071M267.305 692.877h629.068v47.226H267.305z" fill="#3D3939" p-id="1441"></path><path d="M205.912 317.828h-79.62M126.293 294.217h79.62v47.226h-79.62z" fill="#3D3939" p-id="1442"></path><path d="M205.912 450.716h-79.62M126.293 427.105h79.62v47.226h-79.62z" fill="#3D3939" p-id="1443"></path><path d="M205.912 583.604h-79.62M126.293 559.993h79.62v47.226h-79.62z" fill="#3D3939" p-id="1444"></path><path d="M205.912 716.492h-79.62M126.293 692.877h79.62v47.226h-79.62z" fill="#3D3939" p-id="1445"></path></svg>
+                    <svg t="1745910682549" class="icon" viewBox="0 0 1024 1024" version="1.1"
+                        xmlns="http://www.w3.org/2000/svg" p-id="1437" width="200" height="200">
+                        <path d="M267.304 317.828h629.071M267.305 294.217h629.068v47.226H267.305z" fill="#3D3939"
+                            p-id="1438"></path>
+                        <path d="M267.304 450.716h629.071M267.305 427.105h629.068v47.226H267.305z" fill="#3D3939"
+                            p-id="1439"></path>
+                        <path d="M267.304 583.604h629.071M267.305 559.993h629.068v47.226H267.305z" fill="#3D3939"
+                            p-id="1440"></path>
+                        <path d="M267.304 716.492h629.071M267.305 692.877h629.068v47.226H267.305z" fill="#3D3939"
+                            p-id="1441"></path>
+                        <path d="M205.912 317.828h-79.62M126.293 294.217h79.62v47.226h-79.62z" fill="#3D3939"
+                            p-id="1442"></path>
+                        <path d="M205.912 450.716h-79.62M126.293 427.105h79.62v47.226h-79.62z" fill="#3D3939"
+                            p-id="1443"></path>
+                        <path d="M205.912 583.604h-79.62M126.293 559.993h79.62v47.226h-79.62z" fill="#3D3939"
+                            p-id="1444"></path>
+                        <path d="M205.912 716.492h-79.62M126.293 692.877h79.62v47.226h-79.62z" fill="#3D3939"
+                            p-id="1445"></path>
+                    </svg>
                 </span>
-                <input type="text" placeholder='任务详情' name="task_detail"></input>
+                <input type="text" placeholder='任务详情' name="detail"></input>
             </div>
             <div class="form-item task-begin">
                 <span class="icon">
-                    <svg t="1745910704942" class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="1600" width="200" height="200"><path d="M845.582 291.768v459.069H183.899V291.768h661.683m17.752-40.992H166.147c-12.835 0-23.24 10.405-23.24 23.239v494.574c0 12.835 10.405 23.239 23.24 23.239h697.188c12.835 0 23.24-10.404 23.24-23.239V274.015c-0.001-12.835-10.406-23.239-23.241-23.239z" fill="#3D3939" p-id="1601"></path><path d="M866.672 413.73H164.485c-11.319 0-20.496-9.177-20.496-20.496s9.177-20.496 20.496-20.496h702.188c11.321 0 20.496 9.177 20.496 20.496s-9.176 20.496-20.497 20.496zM338.267 287.708c-11.321 0-20.496-9.177-20.496-20.496v-78.834c0-11.319 9.175-20.496 20.496-20.496s20.496 9.177 20.496 20.496v78.834c0 11.319-9.175 20.496-20.496 20.496zM693.733 287.708c-11.321 0-20.496-9.177-20.496-20.496v-78.834c0-11.319 9.175-20.496 20.496-20.496s20.496 9.177 20.496 20.496v78.834c0 11.319-9.175 20.496-20.496 20.496zM364.119 551.955H312.41c-11.321 0-20.496-9.177-20.496-20.496V479.75c0-11.319 9.175-20.496 20.496-20.496h51.708c11.321 0 20.496 9.177 20.496 20.496v51.708c0.001 11.319-9.174 20.497-20.495 20.497z m-31.212-40.993h10.716v-10.716h-10.716v10.716zM541.854 552.889h-51.708c-11.321 0-20.496-9.177-20.496-20.496v-51.708c0-11.319 9.175-20.496 20.496-20.496h51.708c11.321 0 20.496 9.177 20.496 20.496v51.708c0 11.319-9.175 20.496-20.496 20.496z m-31.212-40.992h10.716v-10.716h-10.716v10.716zM719.589 553.822h-51.708c-11.321 0-20.496-9.177-20.496-20.496v-51.708c0-11.319 9.175-20.496 20.496-20.496h51.708c11.321 0 20.496 9.177 20.496 20.496v51.708c0 11.319-9.175 20.496-20.496 20.496z m-31.212-40.992h10.716v-10.716h-10.716v10.716zM364.119 693.914H312.41c-11.321 0-20.496-9.177-20.496-20.496v-51.706c0-11.319 9.175-20.496 20.496-20.496h51.708c11.321 0 20.496 9.177 20.496 20.496v51.706c0.001 11.319-9.174 20.496-20.495 20.496z m-31.212-40.992h10.716v-10.714h-10.716v10.714zM541.854 694.848h-51.708c-11.321 0-20.496-9.177-20.496-20.496v-51.708c0-11.319 9.175-20.496 20.496-20.496h51.708c11.321 0 20.496 9.177 20.496 20.496v51.708c0 11.319-9.175 20.496-20.496 20.496z m-31.212-40.992h10.716V643.14h-10.716v10.716z" fill="#3D3939" p-id="1602"></path></svg>
+                    <svg t="1745910704942" class="icon" viewBox="0 0 1024 1024" version="1.1"
+                        xmlns="http://www.w3.org/2000/svg" p-id="1600" width="200" height="200">
+                        <path
+                            d="M845.582 291.768v459.069H183.899V291.768h661.683m17.752-40.992H166.147c-12.835 0-23.24 10.405-23.24 23.239v494.574c0 12.835 10.405 23.239 23.24 23.239h697.188c12.835 0 23.24-10.404 23.24-23.239V274.015c-0.001-12.835-10.406-23.239-23.241-23.239z"
+                            fill="#3D3939" p-id="1601"></path>
+                        <path
+                            d="M866.672 413.73H164.485c-11.319 0-20.496-9.177-20.496-20.496s9.177-20.496 20.496-20.496h702.188c11.321 0 20.496 9.177 20.496 20.496s-9.176 20.496-20.497 20.496zM338.267 287.708c-11.321 0-20.496-9.177-20.496-20.496v-78.834c0-11.319 9.175-20.496 20.496-20.496s20.496 9.177 20.496 20.496v78.834c0 11.319-9.175 20.496-20.496 20.496zM693.733 287.708c-11.321 0-20.496-9.177-20.496-20.496v-78.834c0-11.319 9.175-20.496 20.496-20.496s20.496 9.177 20.496 20.496v78.834c0 11.319-9.175 20.496-20.496 20.496zM364.119 551.955H312.41c-11.321 0-20.496-9.177-20.496-20.496V479.75c0-11.319 9.175-20.496 20.496-20.496h51.708c11.321 0 20.496 9.177 20.496 20.496v51.708c0.001 11.319-9.174 20.497-20.495 20.497z m-31.212-40.993h10.716v-10.716h-10.716v10.716zM541.854 552.889h-51.708c-11.321 0-20.496-9.177-20.496-20.496v-51.708c0-11.319 9.175-20.496 20.496-20.496h51.708c11.321 0 20.496 9.177 20.496 20.496v51.708c0 11.319-9.175 20.496-20.496 20.496z m-31.212-40.992h10.716v-10.716h-10.716v10.716zM719.589 553.822h-51.708c-11.321 0-20.496-9.177-20.496-20.496v-51.708c0-11.319 9.175-20.496 20.496-20.496h51.708c11.321 0 20.496 9.177 20.496 20.496v51.708c0 11.319-9.175 20.496-20.496 20.496z m-31.212-40.992h10.716v-10.716h-10.716v10.716zM364.119 693.914H312.41c-11.321 0-20.496-9.177-20.496-20.496v-51.706c0-11.319 9.175-20.496 20.496-20.496h51.708c11.321 0 20.496 9.177 20.496 20.496v51.706c0.001 11.319-9.174 20.496-20.495 20.496z m-31.212-40.992h10.716v-10.714h-10.716v10.714zM541.854 694.848h-51.708c-11.321 0-20.496-9.177-20.496-20.496v-51.708c0-11.319 9.175-20.496 20.496-20.496h51.708c11.321 0 20.496 9.177 20.496 20.496v51.708c0 11.319-9.175 20.496-20.496 20.496z m-31.212-40.992h10.716V643.14h-10.716v10.716z"
+                            fill="#3D3939" p-id="1602"></path>
+                    </svg>
                 </span>
-                <input type="time" placeholder="开始时间" name="task_begin"></input>
+                <input id="datetime1" type="datetime-local" placeholder="开始时间" name="task_begin"></input>
             </div>
             <div class="form-item task-end">
                 <span class="icon ">
-                    <svg t="1745910704942" class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="1600" width="200" height="200"><path d="M845.582 291.768v459.069H183.899V291.768h661.683m17.752-40.992H166.147c-12.835 0-23.24 10.405-23.24 23.239v494.574c0 12.835 10.405 23.239 23.24 23.239h697.188c12.835 0 23.24-10.404 23.24-23.239V274.015c-0.001-12.835-10.406-23.239-23.241-23.239z" fill="#3D3939" p-id="1601"></path><path d="M866.672 413.73H164.485c-11.319 0-20.496-9.177-20.496-20.496s9.177-20.496 20.496-20.496h702.188c11.321 0 20.496 9.177 20.496 20.496s-9.176 20.496-20.497 20.496zM338.267 287.708c-11.321 0-20.496-9.177-20.496-20.496v-78.834c0-11.319 9.175-20.496 20.496-20.496s20.496 9.177 20.496 20.496v78.834c0 11.319-9.175 20.496-20.496 20.496zM693.733 287.708c-11.321 0-20.496-9.177-20.496-20.496v-78.834c0-11.319 9.175-20.496 20.496-20.496s20.496 9.177 20.496 20.496v78.834c0 11.319-9.175 20.496-20.496 20.496zM364.119 551.955H312.41c-11.321 0-20.496-9.177-20.496-20.496V479.75c0-11.319 9.175-20.496 20.496-20.496h51.708c11.321 0 20.496 9.177 20.496 20.496v51.708c0.001 11.319-9.174 20.497-20.495 20.497z m-31.212-40.993h10.716v-10.716h-10.716v10.716zM541.854 552.889h-51.708c-11.321 0-20.496-9.177-20.496-20.496v-51.708c0-11.319 9.175-20.496 20.496-20.496h51.708c11.321 0 20.496 9.177 20.496 20.496v51.708c0 11.319-9.175 20.496-20.496 20.496z m-31.212-40.992h10.716v-10.716h-10.716v10.716zM719.589 553.822h-51.708c-11.321 0-20.496-9.177-20.496-20.496v-51.708c0-11.319 9.175-20.496 20.496-20.496h51.708c11.321 0 20.496 9.177 20.496 20.496v51.708c0 11.319-9.175 20.496-20.496 20.496z m-31.212-40.992h10.716v-10.716h-10.716v10.716zM364.119 693.914H312.41c-11.321 0-20.496-9.177-20.496-20.496v-51.706c0-11.319 9.175-20.496 20.496-20.496h51.708c11.321 0 20.496 9.177 20.496 20.496v51.706c0.001 11.319-9.174 20.496-20.495 20.496z m-31.212-40.992h10.716v-10.714h-10.716v10.714zM541.854 694.848h-51.708c-11.321 0-20.496-9.177-20.496-20.496v-51.708c0-11.319 9.175-20.496 20.496-20.496h51.708c11.321 0 20.496 9.177 20.496 20.496v51.708c0 11.319-9.175 20.496-20.496 20.496z m-31.212-40.992h10.716V643.14h-10.716v10.716z" fill="#3D3939" p-id="1602"></path></svg>
+                    <svg t="1745910704942" class="icon" viewBox="0 0 1024 1024" version="1.1"
+                        xmlns="http://www.w3.org/2000/svg" p-id="1600" width="200" height="200">
+                        <path
+                            d="M845.582 291.768v459.069H183.899V291.768h661.683m17.752-40.992H166.147c-12.835 0-23.24 10.405-23.24 23.239v494.574c0 12.835 10.405 23.239 23.24 23.239h697.188c12.835 0 23.24-10.404 23.24-23.239V274.015c-0.001-12.835-10.406-23.239-23.241-23.239z"
+                            fill="#3D3939" p-id="1601"></path>
+                        <path
+                            d="M866.672 413.73H164.485c-11.319 0-20.496-9.177-20.496-20.496s9.177-20.496 20.496-20.496h702.188c11.321 0 20.496 9.177 20.496 20.496s-9.176 20.496-20.497 20.496zM338.267 287.708c-11.321 0-20.496-9.177-20.496-20.496v-78.834c0-11.319 9.175-20.496 20.496-20.496s20.496 9.177 20.496 20.496v78.834c0 11.319-9.175 20.496-20.496 20.496zM693.733 287.708c-11.321 0-20.496-9.177-20.496-20.496v-78.834c0-11.319 9.175-20.496 20.496-20.496s20.496 9.177 20.496 20.496v78.834c0 11.319-9.175 20.496-20.496 20.496zM364.119 551.955H312.41c-11.321 0-20.496-9.177-20.496-20.496V479.75c0-11.319 9.175-20.496 20.496-20.496h51.708c11.321 0 20.496 9.177 20.496 20.496v51.708c0.001 11.319-9.174 20.497-20.495 20.497z m-31.212-40.993h10.716v-10.716h-10.716v10.716zM541.854 552.889h-51.708c-11.321 0-20.496-9.177-20.496-20.496v-51.708c0-11.319 9.175-20.496 20.496-20.496h51.708c11.321 0 20.496 9.177 20.496 20.496v51.708c0 11.319-9.175 20.496-20.496 20.496z m-31.212-40.992h10.716v-10.716h-10.716v10.716zM719.589 553.822h-51.708c-11.321 0-20.496-9.177-20.496-20.496v-51.708c0-11.319 9.175-20.496 20.496-20.496h51.708c11.321 0 20.496 9.177 20.496 20.496v51.708c0 11.319-9.175 20.496-20.496 20.496z m-31.212-40.992h10.716v-10.716h-10.716v10.716zM364.119 693.914H312.41c-11.321 0-20.496-9.177-20.496-20.496v-51.706c0-11.319 9.175-20.496 20.496-20.496h51.708c11.321 0 20.496 9.177 20.496 20.496v51.706c0.001 11.319-9.174 20.496-20.495 20.496z m-31.212-40.992h10.716v-10.714h-10.716v10.714zM541.854 694.848h-51.708c-11.321 0-20.496-9.177-20.496-20.496v-51.708c0-11.319 9.175-20.496 20.496-20.496h51.708c11.321 0 20.496 9.177 20.496 20.496v51.708c0 11.319-9.175 20.496-20.496 20.496z m-31.212-40.992h10.716V643.14h-10.716v10.716z"
+                            fill="#3D3939" p-id="1602"></path>
+                    </svg>
                 </span>
-                <input type="time" placeholder="结束时间" name="task_end"></input>
+                <input id="datetime2" type="datetime-local" placeholder="结束时间" name="task_end"></input>
             </div>
             <button type="primiry" onclick="addTask(event)">提交</button>
             <button onclick="toggleModal(event,false)">取消</button>
@@ -88,65 +142,160 @@
 </body>
 <!-- <script src="./indexDB.js" type="module" defer></script> -->
 <script type="module">
-    import { openDB, addData, deleteData, getData, updateData } from './indexDB.js';
+    import { openDB, addData, deleteData, getIndexData, updateData } from './indexDB.js';
     window.dbName = 'kanbanDB';
     window.dbVersion = 1;
-    window.dbStoreName = 'kanbanStore';
-    const res = await openDB(dbName, dbVersion, dbStoreName, 'id');
+    window.dbStoreName = 'taskStore';
+    const res = await openDB(dbName, dbVersion, dbStoreName, 'id', [
+        { indexName: 'id', indexKey: 'id', options: { unique: true } },
+        { indexName: 'status', indexKey: 'status', options: { unique: false } },
+        { indexName: 'name', indexKey: 'name', options: { unique: false } },
+        { indexName: 'detail', indexKey: 'detail', options: { unique: false } },
+        { indexName: 'task_begin', indexKey: 'task_begin', options: { unique: false } },
+        { indexName: 'task_end', indexKey: 'task_end', options: { unique: false } },
+    ]);
     window.db = res.success && res.data
     window.addData = addData
     window.deleteData = deleteData
-    window.getData = getData
+    window.getIndexData = getIndexData
     window.updateData = updateData
+    getTodoDatas()
+    getInprogressDatas()
+    getDoneDatas()
 
 </script>
 <script>
-   
-    /**添加新任务
-    */
-    async function addTask (ev) {
-        var formData = new FormData(document.getElementById('task-form'));
-        console.log(ev,formData.entries());
-        const data={id:new Date().getTime()};
-        for(let [name,value] of formData.entries()){
-            data[name]=value
-        }
-        console.log(data)
-        ev.preventDefault()
-        const res = await addData(db, dbStoreName, {id:data.id,value:data});
-        if (!res.success) {
-            console.error('添加数据失败', res.msg);
-            return;
-        }
-        toggleModal(ev,false)
+    window.onload = function () {
+
+    }
+    /**
+     * 格式化时间
+     * @param {string} dateTime 时间字符串
+     * @returns {string} 格式化后的时间字符串
+     */
+    function formatTime (dateTime = new Date()) {
+        // 丢失时区信息 加上8小时
+        dateTime = new Date(+dateTime + 8 * 3600 * 1000)
+        return new Date(dateTime).toISOString().replace(/T/g, ' ').slice(0, 16)
+    }
+    /**
+     * 添加任务DOM
+     * @param {Object} data 任务数据
+     * @param {string} domId 目标DOM ID
+     */
+    function addTaskDom (data,domId='todo') {
         const child = document.createElement('div')
         child.className = 'task'
         child.draggable = true
         child.ondragstart = drag
         child.id = data.id
-        child.innerHTML = `<span>${data.task_detail}</span>`
-        document.getElementById('todo').appendChild(child)
+        child.setAttribute('data-status', data.status)
+        child.setAttribute('data-detail', data.detail)
+        child.setAttribute('data-name', data.name)
+        child.setAttribute('data-begin', data.task_begin)
+        child.setAttribute('data-end', data.task_end)
+        // child.innerHTML = `<span>${data.detail}</span>`
+        child.innerHTML = `<div class='item-title'>${data.detail}</div>
+                    <div class='item-detail'>
+                        <span>所属项目</span>
+                        <div>${data.name}</div>
+                    </div>
+                    <div class='item-detail'>
+                        <span>开始时间</span>
+                        <div>${data.task_begin}</div>
+                    </div>
+                    <div class='item-detail'>
+                        <span>结束时间</span>
+                        <div>${data.task_end}</div>
+                    </div> `
+        document.getElementById(domId).appendChild(child)
+    }
+    /**添加新任务
+     * @param {Event} ev 事件对象
+     * @returns {Promise<void>}
+     */
+    async function addTask (ev) {
+        ev.preventDefault()
+        var formData = new FormData(document.getElementById('task-form'));
+        // console.log(ev,formData.entries());
+        const data = { id: new Date().getTime()+'', status: '0' };
+        for (let [name, value] of formData.entries()) {
+            data[name] = value
+        }
+        data.task_begin = formatTime()
+        data.task_end = formatTime()
+
+        const res = await addData(db, dbStoreName, data);
+        if (!res.success) {
+            console.error('添加数据失败', res.msg);
+            return;
+        }
+        toggleModal(ev, false)
+        addTaskDom(data,'todo')
 
     }
-     /**打开新建任务窗口
-     */
-     function toggleModal (ev,visible) {
+    /**打开新建任务窗口
+    */
+    function toggleModal (ev, visible) {
         const mask = document.querySelector('.mask')
         const taskWrap = document.querySelector('.task-wrap')
-        const display=visible?'block':'none'
+        const display = visible ? 'block' : 'none'
         mask.style.display = display
         taskWrap.style.display = display
+        // 默认当前时间；
+        const dateTime = new Date()
+        document.getElementById('datetime1').value = formatTime(dateTime)
+        document.getElementById('datetime2').value = formatTime(dateTime)
+    }
+
+    //显示任务列表
+    async function getTodoDatas () {
+        const todoRes = await getIndexData(db, dbStoreName, 'status', '0')
+        if (todoRes.success) {
+            todoRes.data.forEach(item => {
+                addTaskDom(item, 'todo')
+            })
+        }
+    }
+    //显示任务列表
+    async function getInprogressDatas () {
+        const todoRes = await getIndexData(db, dbStoreName, 'status', '1')
+        if (todoRes.success) {
+            todoRes.data.forEach(item => {
+                addTaskDom(item, 'inprogress')
+            })
+        }
+    }
+    //显示任务列表
+    async function getDoneDatas () {
+        const todoRes = await getIndexData(db, dbStoreName, 'status', '2')
+        if (todoRes.success) {
+            todoRes.data.forEach(item => {
+                addTaskDom(item, 'done')
+            })
+        }
     }
     function drag (ev) {
-        ev.dataTransfer.setData("text", ev.target.id);
+        ev.dataTransfer.setData("id", ev.target.id);
+        // ev.dataTransfer.setData("status", ev.target.dataset.status);
+        ev.dataTransfer.setData("detail", ev.target.dataset.detail);
+        ev.dataTransfer.setData("name", ev.target.dataset.name);
+        ev.dataTransfer.setData("begin", ev.target.dataset.begin);
+        ev.dataTransfer.setData("end", ev.target.dataset.end);
+        // ev.dataTransfer.setData("status", ev.target.dataset.status);
     }
     function allowDrop (ev) {
         ev.preventDefault();
     }
-    function drop (ev) {
+    function drop (ev,status) {
         ev.preventDefault();
-        var data = ev.dataTransfer.getData("text");
-        ev.target.closest('.kanban-block').appendChild(document.getElementById(data));
+        const id = ev.dataTransfer.getData("id");
+        const detail = ev.dataTransfer.getData("detail");
+        const name = ev.dataTransfer.getData("name");
+        const task_begin = ev.dataTransfer.getData("begin");
+        const task_end = ev.dataTransfer.getData("end");
+        updateData(db,dbStoreName,{id,detail,name,task_begin,task_end,status})
+        ev.target.closest('.kanban-block').appendChild(document.getElementById(id));
     }
 </script>
 
