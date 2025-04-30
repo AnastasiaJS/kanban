@@ -14,44 +14,15 @@
         </div>
 
         <div class="kanban-board">
-            <div class="task-block">
-                <div class="task" id="task1" draggable="true" ondragstart="drag(event)">
-                    <div class="item-title">Task 1</div>
-                    <div class="item-detail">
-                        <span>所属项目</span>
-                        <div>个人看板</div>
-                    </div>
-                    <div class="item-detail">
-                        <span>开始时间</span>
-                        <div>2025-04-23 10:00</div>
-                    </div>
-                    <div class="item-detail">
-                        <span>结束时间</span>
-                        <div>2025-04-23 10:00</div>
-                    </div>
-                </div>
-                <div class="task" id="task2" draggable="true" ondragstart="drag(event)">
-                    <span>Task 2</span>
-                </div>
-                <div class="task" id="task3" draggable="true" ondragstart="drag(event)">
-                    <span>Task 3</span>
-                </div>
-                <div class="task" id="task4" draggable="true" ondragstart="drag(event)">
-                    <span>Task 4</span>
-                </div>
-                <div class="task" id="task5" draggable="true" ondragstart="drag(event)">
-                    <span>Task 5</span>
-                </div>
-                <div class="task" id="task6" draggable="true" ondragstart="drag(event)">
-                    <span>Task 6</span>
+            <div class="task-block" id="unclassified">
+                <strong style="color:#fff">未分类</strong>
+                <div class="task-button-block">
+                    <button id="task-button" onclick="toggleModal(event,true)">新建任务
                 </div>
             </div>
             <div class="kanban">
                 <div class="kanban-block" id="todo" ondrop="drop(event,'0')" ondragover="allowDrop(event)">
                     <strong>未开始</strong>
-                    <div class="task-button-block">
-                        <button id="task-button" onclick="toggleModal(event,true)">新建任务
-                    </div>
                 </div>
                 <div class="kanban-block" id="inprogress" ondrop="drop(event,'1')" ondragover="allowDrop(event)">
                     <strong>进行中</strong>
@@ -162,6 +133,7 @@
     getTodoDatas()
     getInprogressDatas()
     getDoneDatas()
+    getUnclassifiedDatas()
 
 </script>
 <script>
@@ -183,7 +155,7 @@
      * @param {Object} data 任务数据
      * @param {string} domId 目标DOM ID
      */
-    function addTaskDom (data,domId='todo') {
+    function addTaskDom (data,domId='unclassified') {
         const child = document.createElement('div')
         child.className = 'task'
         child.draggable = true
@@ -218,7 +190,8 @@
         ev.preventDefault()
         var formData = new FormData(document.getElementById('task-form'));
         // console.log(ev,formData.entries());
-        const data = { id: new Date().getTime()+'', status: '0' };
+        //status:-1未分类 0 未开始 1进行中 2已完成 
+        const data = { id: new Date().getTime()+'', status: '-1' };
         for (let [name, value] of formData.entries()) {
             data[name] = value
         }
@@ -231,7 +204,7 @@
             return;
         }
         toggleModal(ev, false)
-        addTaskDom(data,'todo')
+        addTaskDom(data)
 
     }
     /**打开新建任务窗口
@@ -272,6 +245,14 @@
         if (todoRes.success) {
             todoRes.data.forEach(item => {
                 addTaskDom(item, 'done')
+            })
+        }
+    }
+    async function getUnclassifiedDatas () {
+        const todoRes = await getIndexData(db, dbStoreName, 'status', '-1')
+        if (todoRes.success) {
+            todoRes.data.forEach(item => {
+                addTaskDom(item, 'unclassified')
             })
         }
     }
