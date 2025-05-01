@@ -23,6 +23,7 @@ body {
     padding: 0.8rem 1.7rem;
     border-radius: 0.5rem;
     margin: 1rem;
+    color: white;
 }
 
 .kanban-board {
@@ -46,7 +47,9 @@ body {
     display: inline-flex;
     justify-content: space-between;
 }
-
+#pieChart{
+    flex:1
+}
 .kanban-block {
     padding: 0.6rem;
     /* margin-right: 1rem; */

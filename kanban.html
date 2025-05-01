@@ -34,7 +34,8 @@
         </div>
 
     </div>
-    </div>
+    <canvas id="pieChart" width="600" height="400" style="position: relative;left:50%;margin-left:-300px;margin-top:5rem;border: 1px solid #ccc"></canvas>
+
 
     <div class="mask"></div>
     <div class="task-wrap">
@@ -110,10 +111,14 @@
             <button onclick="toggleModal(event,false)">取消</button>
         </form>
     </div>
+
+
 </body>
+
 <!-- <script src="./indexDB.js" type="module" defer></script> -->
 <script type="module">
     import { openDB, addData, deleteData, getIndexData, updateData } from './indexDB.js';
+    import { drawPieChart } from './pieChart.js';
     window.dbName = 'kanbanDB';
     window.dbVersion = 1;
     window.dbStoreName = 'taskStore';
@@ -130,12 +135,12 @@
     window.deleteData = deleteData
     window.getIndexData = getIndexData
     window.updateData = updateData
-    getTodoDatas()
-    getInprogressDatas()
-    getDoneDatas()
-    getUnclassifiedDatas()
+    window.drawPieChart = drawPieChart
+    getAllDatas()
 
 </script>
+<!-- <script defer src="pieChart.js"></script> -->
+
 <script>
     window.onload = function () {
 
@@ -155,7 +160,7 @@
      * @param {Object} data 任务数据
      * @param {string} domId 目标DOM ID
      */
-    function addTaskDom (data,domId='unclassified') {
+    function addTaskDom (data, domId = 'unclassified') {
         const child = document.createElement('div')
         child.className = 'task'
         child.draggable = true
@@ -191,7 +196,7 @@
         var formData = new FormData(document.getElementById('task-form'));
         // console.log(ev,formData.entries());
         //status:-1未分类 0 未开始 1进行中 2已完成 
-        const data = { id: new Date().getTime()+'', status: '-1' };
+        const data = { id: new Date().getTime() + '', status: '-1' };
         for (let [name, value] of formData.entries()) {
             data[name] = value
         }
@@ -205,7 +210,7 @@
         }
         toggleModal(ev, false)
         addTaskDom(data)
-
+        unclassifiedDatas.push(data)
     }
     /**打开新建任务窗口
     */
@@ -222,43 +227,97 @@
     }
 
     //显示任务列表
+    async function getAllDatas () {
+        
+        await getTodoDatas()
+        await getInprogressDatas()
+        await getDoneDatas()
+        await getUnclassifiedDatas()
+        drawPieChart(todoDatas, inprogressDatas, donesDatas, unclassifiedDatas)
+    }
     async function getTodoDatas () {
-        const todoRes = await getIndexData(db, dbStoreName, 'status', '0')
-        if (todoRes.success) {
-            todoRes.data.forEach(item => {
+        const res = await getIndexData(db, dbStoreName, 'status', '0')
+        if (res.success) {
+            todoDatas = res.data
+
+            res.data.forEach(item => {
                 addTaskDom(item, 'todo')
             })
+
+            const handler = {
+                set (target, key, value) {
+                    target[key] = value
+                    console.log('数据发生变化', target, key, value)
+                    drawPieChart(window.todoDatas, window.inprogressDatas, window.donesDatas, window.unclassifiedDatas)
+                    Reflect.set(target, key, value)
+                    return true
+                }
+            }
+            window.todoDatas = new Proxy(res.data, handler)
         }
     }
     //显示任务列表
     async function getInprogressDatas () {
-        const todoRes = await getIndexData(db, dbStoreName, 'status', '1')
-        if (todoRes.success) {
-            todoRes.data.forEach(item => {
+        const res = await getIndexData(db, dbStoreName, 'status', '1')
+        if (res.success) {
+            // window.inprogressDatas = res.data
+            res.data.forEach(item => {
                 addTaskDom(item, 'inprogress')
             })
+            const handler = {
+                set (target, key, value) {
+                    target[key] = value
+                    console.log('数据发生变化', target, key, value)
+                    drawPieChart(window.todoDatas, window.inprogressDatas, window.donesDatas, window.unclassifiedDatas)
+                    Reflect.set(target, key, value)
+                    return true
+                }
+            }
+            window.inprogressDatas = new Proxy(res.data, handler)
         }
     }
     //显示任务列表
     async function getDoneDatas () {
-        const todoRes = await getIndexData(db, dbStoreName, 'status', '2')
-        if (todoRes.success) {
-            todoRes.data.forEach(item => {
+        const res = await getIndexData(db, dbStoreName, 'status', '2')
+        if (res.success) {
+            // window.donesDatas = res.data
+            res.data.forEach(item => {
                 addTaskDom(item, 'done')
             })
+            const handler = {
+                set (target, key, value) {
+                    target[key] = value
+                    console.log('数据发生变化', target, key, value)
+                    drawPieChart(window.todoDatas, window.inprogressDatas, window.donesDatas, window.unclassifiedDatas)
+                    Reflect.set(target, key, value)
+                    return true
+                }
+            }
+            window.donesDatas = new Proxy(res.data, handler)
         }
     }
     async function getUnclassifiedDatas () {
-        const todoRes = await getIndexData(db, dbStoreName, 'status', '-1')
-        if (todoRes.success) {
-            todoRes.data.forEach(item => {
+        const res = await getIndexData(db, dbStoreName, 'status', '-1')
+        if (res.success) {
+            // window.unclassifiedDatas = res.data
+            res.data.forEach(item => {
                 addTaskDom(item, 'unclassified')
             })
+            const handler = {
+                set (target, key, value) {
+                    target[key] = value
+                    console.log('数据发生变化', target, key, value)
+                    drawPieChart(window.todoDatas, window.inprogressDatas, window.donesDatas, window.unclassifiedDatas)
+                    Reflect.set(target, key, value)
+                    return true
+                }
+            }
+            window.unclassifiedDatas = new Proxy(res.data, handler)
         }
     }
     function drag (ev) {
         ev.dataTransfer.setData("id", ev.target.id);
-        // ev.dataTransfer.setData("status", ev.target.dataset.status);
+        ev.dataTransfer.setData("status", ev.target.dataset.status);
         ev.dataTransfer.setData("detail", ev.target.dataset.detail);
         ev.dataTransfer.setData("name", ev.target.dataset.name);
         ev.dataTransfer.setData("begin", ev.target.dataset.begin);
@@ -268,15 +327,30 @@
     function allowDrop (ev) {
         ev.preventDefault();
     }
-    function drop (ev,status) {
+    async function drop (ev, status) {
         ev.preventDefault();
         const id = ev.dataTransfer.getData("id");
+        const oldStatus = ev.dataTransfer.getData("status");
         const detail = ev.dataTransfer.getData("detail");
         const name = ev.dataTransfer.getData("name");
         const task_begin = ev.dataTransfer.getData("begin");
         const task_end = ev.dataTransfer.getData("end");
-        updateData(db,dbStoreName,{id,detail,name,task_begin,task_end,status})
-        ev.target.closest('.kanban-block').appendChild(document.getElementById(id));
+        const res = await updateData(db, dbStoreName, { id, detail, name, task_begin, task_end, status })
+        if (res.success) {
+            const index = {
+                '0': todoDatas,
+                '1': inprogressDatas,
+                '2': donesDatas,
+                '-1': unclassifiedDatas
+            }
+            ev.target.closest('.kanban-block').appendChild(document.getElementById(id));
+            // console.log('数据更新成功', oldStatus, index[oldStatus]);
+            index[oldStatus].splice(index[oldStatus].findIndex(item => item.id === id), 1)
+            index[status].push({ id, detail, name, task_begin, task_end, status })
+        }
+
+        // getAllDatas()
+
     }
 </script>
 
