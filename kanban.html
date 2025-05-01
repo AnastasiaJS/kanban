@@ -173,6 +173,7 @@
         child.setAttribute('data-end', data.task_end)
         // child.innerHTML = `<span>${data.detail}</span>`
         child.innerHTML = `<div class='item-title'>${data.detail}</div>
+                    <div class='delete' onclick='deleteTask(event,${data.status},${data.id})'>删除</div>
                     <div class='item-detail'>
                         <span>所属项目</span>
                         <div>${data.name}</div>
@@ -225,7 +226,34 @@
         document.getElementById('datetime1').value = formatTime(dateTime)
         document.getElementById('datetime2').value = formatTime(dateTime)
     }
-
+    
+    /**
+     * 删除任务
+     * @param {Event} ev 事件对象
+     * @param {string} id 任务ID
+     */
+    function deleteTask (ev,status, id) {
+        ev.stopPropagation()
+        const res = confirm('确定删除吗？')
+        if (res) {
+            const task = document.getElementById(id)
+            const status = task.dataset.status
+            const index = {
+                '0': todoDatas,
+                '1': inprogressDatas,
+                '2': donesDatas,
+                '-1': unclassifiedDatas
+            }
+            index[status].splice(index[status].findIndex(item => item.id === id), 1)
+            task.remove()
+            // console.log('删除任务', id, status);
+            deleteData(db, dbStoreName, id+'').then((result) => {
+                console.log('删除成功', result);
+            }).catch((err) => {
+                
+            });
+        }
+    }
     //显示任务列表
     async function getAllDatas () {
         

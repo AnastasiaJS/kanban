@@ -72,6 +72,7 @@ body {
 }
 
 .task {
+    position: relative;
     background-color: white;
     margin: 0.2rem 0 0.3rem 0rem;
     /* border: 0.1px solid #ccc; */
@@ -80,6 +81,14 @@ body {
 }
 .task .item-title{
     font-size: 1.2rem;
+}
+.delete{
+    position: absolute;
+    right: 0.5rem;
+    top: 0.5rem;
+    color: #999;
+    width:2rem;
+    font-size: 0.8rem;
 }
 .task .item-detail span{
     font-size: 0.8rem;
